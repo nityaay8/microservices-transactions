@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.n9.controller.DebitControllerTest
+-------------------------------------------------------------------------------
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.41 s - in com.n9.controller.DebitControllerTest

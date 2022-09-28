@@ -1,0 +1,10 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+debit-service,com.n9.entity,BaseEntity,28,3,0,0,12,1,8,1,8,1
+debit-service,com.n9.entity,Account,0,17,0,0,0,7,0,5,0,5
+debit-service,com.n9.service,DebitDataService,0,51,0,4,0,11,0,4,0,2
+debit-service,com.n9,DebitServiceApplication,6,3,0,0,2,1,1,1,1,1
+debit-service,com.n9.controller,DebitController,10,43,1,3,2,13,1,3,0,2
+debit-service,com.n9.controller,DebitAccountExceptionController,0,13,0,0,0,2,0,2,0,2
+debit-service,com.n9.exception,DebitAccountException,8,4,0,0,4,2,2,1,2,1
+debit-service,com.n9.dto,StatusDTO,7,9,0,0,4,4,2,2,2,2
+debit-service,com.n9.dto,DebitDTO,0,17,0,0,0,7,0,5,0,5

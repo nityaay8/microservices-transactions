@@ -36,7 +36,7 @@ public class DebitController {
         try {
             if (debitDTO.getActId() == null || debitDTO.getAmount() == null) {
                 logger.warn("invalid account details = " + debitDTO);
-                responseEntity = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(debitDTO);
+                responseEntity = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new StatusDTO("invalid account details"));
             } else {
                 debitDTO = debitDataService.performDebit(debitDTO);
                 responseEntity = ResponseEntity.ok(debitDTO);
