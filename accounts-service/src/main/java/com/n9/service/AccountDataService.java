@@ -1,0 +1,94 @@
+package com.n9.service;
+
+import com.n9.dto.AccountDTO;
+import com.n9.entity.Account;
+import com.n9.exception.AccountException;
+import com.n9.repository.AccountRepository;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+@Service
+@Transactional
+public class AccountDataService {
+
+    @Autowired
+    private AccountRepository accountRepository;
+
+    @Autowired
+    private ModelMapper modelMapper;
+
+
+    public AccountDTO save(AccountDTO accountDTO) {
+
+        Account account = modelMapper.map(accountDTO, Account.class);
+
+        account = accountRepository.save(account);
+
+        AccountDTO savedAccountDTO = modelMapper.map(account, AccountDTO.class);
+
+        return savedAccountDTO;
+    }
+
+    public AccountDTO update(AccountDTO accountDTO) {
+
+        Optional<Account> accountOpt = accountRepository.findById(accountDTO.getAccountId());
+        if (!accountOpt.isPresent()) {
+            throw new AccountException("Account is not found for account id " +
+                    accountDTO.getAccountId());
+        }
+
+        Account account = accountOpt.get();
+
+        modelMapper.map(accountDTO, account);
+
+        accountRepository.save(account);
+
+        return accountDTO;
+
+    }
+
+    public AccountDTO getAccount(Long accountId) {
+
+
+        Optional<Account> accountOpt = accountRepository.findById(accountId);
+        if (!accountOpt.isPresent()) {
+            throw new AccountException("Account is not found for account id " +
+                    accountId);
+        }
+
+        AccountDTO accountDTO = modelMapper.map(accountOpt.get(), AccountDTO.class);
+
+        return accountDTO;
+    }
+
+    public void removeAccount(Long accountId) {
+
+        Optional<Account> accountOpt = accountRepository.findById(accountId);
+        if (!accountOpt.isPresent()) {
+            throw new AccountException("Account is not found for account id " +
+                    accountId);
+        }
+
+        accountRepository.deleteById(accountId);
+
+    }
+
+    public List<AccountDTO> getAllAccount() {
+
+
+        List<Account> accountList = accountRepository.findAll();
+
+        List<AccountDTO> accountDTOList = accountList.stream().
+                map(act -> modelMapper.map(act, AccountDTO.class)).collect(Collectors.toList());
+
+
+        return accountDTOList;
+    }
+
+}
