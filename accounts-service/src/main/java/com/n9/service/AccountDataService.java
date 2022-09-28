@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -28,6 +29,12 @@ public class AccountDataService {
 
         Account account = modelMapper.map(accountDTO, Account.class);
 
+        account.setCreatedDate(new Date());
+        account.setUpdatedDate(new Date());
+
+        account.setCreatedBy("user");
+        account.setUpdatedBy("user");
+
         account = accountRepository.save(account);
 
         AccountDTO savedAccountDTO = modelMapper.map(account, AccountDTO.class);
@@ -46,6 +53,10 @@ public class AccountDataService {
         Account account = accountOpt.get();
 
         modelMapper.map(accountDTO, account);
+
+
+        account.setUpdatedDate(new Date());
+        account.setUpdatedBy("user");
 
         accountRepository.save(account);
 

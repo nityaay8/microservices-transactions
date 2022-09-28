@@ -6,6 +6,8 @@ public class CreditDTO {
 
     private Float amount;
 
+    private String name;
+
     public Long getActId() {
         return actId;
     }
@@ -20,5 +22,13 @@ public class CreditDTO {
 
     public void setAmount(Float amount) {
         this.amount = amount;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

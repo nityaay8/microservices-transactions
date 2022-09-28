@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Date;
 import java.util.Optional;
 
 @Service
@@ -32,6 +33,8 @@ public class DebitDataService {
             throw new DebitAccountException("Account does not have sufficient balance");
         }
 
+        account.setUpdatedDate(new Date());
+        account.setUpdatedBy("user");
         account.setAmount(amount);
         accountRepository.save(account);
 

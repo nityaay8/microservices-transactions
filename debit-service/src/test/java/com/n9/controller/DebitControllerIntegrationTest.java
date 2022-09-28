@@ -31,15 +31,21 @@ public class DebitControllerIntegrationTest {
         baseUrl = "http://localhost:" + port + "/debit";
     }
 
+    JSONObject getDebitJsonInfo() throws Exception {
+        JSONObject debitInfoObject = new JSONObject();
+        debitInfoObject.put("actId", "3");
+        debitInfoObject.put("amount", "10");
+
+        return debitInfoObject;
+    }
+
     @Test
     public void testPerformDebit() throws Exception {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        JSONObject debitInfoObject = new JSONObject();
-        debitInfoObject.put("actId", "100");
-        debitInfoObject.put("amount", "10");
+        JSONObject debitInfoObject = getDebitJsonInfo();
 
         HttpEntity<String> request =
                 new HttpEntity<String>(debitInfoObject.toString(), headers);
@@ -54,7 +60,7 @@ public class DebitControllerIntegrationTest {
 
         JSONObject respJsonObject = new JSONObject(responseEntity.getBody());
 
-        Assertions.assertEquals(100, respJsonObject.get("actId"));
+        Assertions.assertEquals(Integer.valueOf(debitInfoObject.get("actId").toString()), respJsonObject.get("actId"));
 
 
     }
@@ -103,7 +109,7 @@ public class DebitControllerIntegrationTest {
 
         JSONObject respJsonObject = new JSONObject(responseEntity.getBody());
 
-        Assertions.assertEquals("Account is not found for account id 1001" , respJsonObject.get("statusMsg"));
+        Assertions.assertEquals("Account is not found for account id 1001", respJsonObject.get("statusMsg"));
 
 
     }
@@ -113,8 +119,7 @@ public class DebitControllerIntegrationTest {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        JSONObject debitInfoObject = new JSONObject();
-        debitInfoObject.put("actId", "100");
+        JSONObject debitInfoObject = getDebitJsonInfo();
         debitInfoObject.put("amount", "1000000000");
 
         HttpEntity<String> request =
@@ -127,7 +132,7 @@ public class DebitControllerIntegrationTest {
 
         JSONObject respJsonObject = new JSONObject(responseEntity.getBody());
 
-        Assertions.assertEquals("Account does not have sufficient balance" , respJsonObject.get("statusMsg"));
+        Assertions.assertEquals("Account does not have sufficient balance", respJsonObject.get("statusMsg"));
     }
 
 

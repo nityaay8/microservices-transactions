@@ -2,6 +2,9 @@ package com.n9.dto;
 
 public class AccountDTO {
 
+
+    private String name;
+
     private Long accountId;
 
     private Float amount;
@@ -21,5 +24,13 @@ public class AccountDTO {
 
     public void setAccountId(Long accountId) {
         this.accountId = accountId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

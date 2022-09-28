@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Date;
 import java.util.Optional;
 
 @Service
@@ -26,6 +27,8 @@ public class CreditDataService {
         }
 
         Account account = accountOpt.get();
+        account.setUpdatedDate(new Date());
+        account.setUpdatedBy("user");
 
         float amount = account.getAmount() + debitDTO.getAmount();
 

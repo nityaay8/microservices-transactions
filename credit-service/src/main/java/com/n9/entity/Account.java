@@ -14,6 +14,9 @@ public class Account extends BaseEntity {
     @Column(name = "amount")
     private Float amount;
 
+    @Column(name = "name")
+    private String name;
+
     public Long getAccountId() {
         return accountId;
     }
@@ -28,5 +31,13 @@ public class Account extends BaseEntity {
 
     public void setAmount(Float amount) {
         this.amount = amount;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
