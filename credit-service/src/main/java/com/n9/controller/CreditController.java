@@ -1,9 +1,9 @@
 package com.n9.controller;
 
-import com.n9.dto.DebitDTO;
+import com.n9.dto.CreditDTO;
 import com.n9.dto.StatusDTO;
-import com.n9.exception.DebitAccountException;
-import com.n9.service.DebitDataService;
+import com.n9.exception.CreditAccountException;
+import com.n9.service.CreditDataService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,28 +15,29 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/debit")
-public class DebitController {
+@RequestMapping("/credit")
+public class CreditController {
 
-    Logger logger = LoggerFactory.getLogger(DebitController.class);
+    Logger logger = LoggerFactory.getLogger(CreditController.class);
 
-    public DebitController() {
+    public CreditController() {
 
     }
 
     @Autowired
-    private DebitDataService debitDataService;
+    private CreditDataService debitDataService;
 
     @PostMapping
-    public ResponseEntity performDebit(@RequestBody DebitDTO debitDTO) {
+    public ResponseEntity performCredit(@RequestBody CreditDTO debitDTO) {
 
         ResponseEntity responseEntity = null;
+
 
         if (debitDTO.getActId() == null || debitDTO.getAmount() == null) {
             logger.warn("invalid account details = " + debitDTO);
             responseEntity = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new StatusDTO("invalid account details"));
         } else {
-            debitDTO = debitDataService.performDebit(debitDTO);
+            debitDTO = debitDataService.performCredit(debitDTO);
             responseEntity = ResponseEntity.ok(debitDTO);
         }
 

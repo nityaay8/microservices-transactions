@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.n9</groupId>
-    <artifactId>accounts-service</artifactId>
+    <artifactId>credit-service</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
@@ -52,17 +52,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.modelmapper</groupId>
-            <artifactId>modelmapper</artifactId>
-            <version>3.1.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
@@ -102,7 +91,7 @@
                                         <limit>
                                             <counter>LINE</counter>
                                             <value>COVEREDRATIO</value>
-                                            <minimum>0.0</minimum>
+                                            <minimum>0.2</minimum>
                                         </limit>
                                     </limits>
                                 </rule>

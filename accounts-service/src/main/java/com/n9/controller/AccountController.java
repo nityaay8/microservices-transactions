@@ -38,8 +38,15 @@ public class AccountController {
     @GetMapping("{accountId}")
     public ResponseEntity getAccount(@PathVariable("accountId") Long accountId) {
         ResponseEntity responseEntity;
-        AccountDTO accountDTO = accountDataService.getAccount(accountId);
-        responseEntity = ResponseEntity.ok(accountDTO);
+        try {
+            AccountDTO accountDTO = accountDataService.getAccount(accountId);
+            responseEntity = ResponseEntity.ok(accountDTO);
+        } catch (AccountException ae) {
+            responseEntity = ResponseEntity.badRequest().body(new StatusDTO(ae.getMessage()));
+        } catch (Exception e) {
+            responseEntity = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new StatusDTO(e.getMessage()));
+
+        }
         return responseEntity;
     }
 
