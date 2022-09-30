@@ -7,12 +7,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 @RestController
 @RequestMapping("weather")
 public class WeatherController {
     @Autowired
     private RuntimeService runtimeService;
+
+    @Autowired
+    private RestTemplate restTemplate;
 
     @GetMapping
     public ResponseEntity weatherCheker() {

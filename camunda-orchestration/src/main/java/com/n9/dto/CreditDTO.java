@@ -1,15 +1,20 @@
 package com.n9.dto;
 
-import java.io.Serializable;
+public class CreditDTO {
 
-public class AccountDTO implements Serializable {
+    private Long actId;
 
+    private Float amount;
 
     private String name;
 
-    private Long accountId;
+    public Long getActId() {
+        return actId;
+    }
 
-    private Float amount;
+    public void setActId(Long actId) {
+        this.actId = actId;
+    }
 
     public Float getAmount() {
         return amount;
@@ -17,15 +22,6 @@ public class AccountDTO implements Serializable {
 
     public void setAmount(Float amount) {
         this.amount = amount;
-    }
-
-
-    public Long getAccountId() {
-        return accountId;
-    }
-
-    public void setAccountId(Long accountId) {
-        this.accountId = accountId;
     }
 
     public String getName() {
@@ -38,10 +34,10 @@ public class AccountDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "AccountDTO{" +
-                "name='" + name + '\'' +
-                ", accountId=" + accountId +
+        return "CreditDTO{" +
+                "actId=" + actId +
                 ", amount=" + amount +
+                ", name='" + name + '\'' +
                 '}';
     }
 }
