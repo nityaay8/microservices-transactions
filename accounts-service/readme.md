@@ -6,3 +6,6 @@ https://www.baeldung.com/spring-rest-openapi-documentation
     http://localhost:8090/api-docs/
     
     http://localhost:8090/swagger-ui.html
+
+[//]: # (camunda)
+https://docs.camunda.org/get-started/spring-boot/project-setup/
