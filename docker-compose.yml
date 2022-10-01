@@ -1,0 +1,80 @@
+version: "3.7"
+services:
+  accounts-service:
+    depends_on:
+      - db
+    container_name: accounts-service
+    build:
+      context: accounts-service
+      dockerfile: Dockerfile
+    image: accounts-service:latest
+    environment:
+      - dbUrl=jdbc:mysql://db:3306/bank1?createDatabaseIfNotExist=true
+    ports:
+      - 8093:8093
+    networks:
+      - spring-cloud-network
+  debit-service:
+    depends_on:
+      - db
+    container_name: debit-service
+    build:
+      context: debit-service
+      dockerfile: Dockerfile
+    image: debit-service:latest
+    environment:
+      - dbUrl=jdbc:mysql://db:3306/bank1?createDatabaseIfNotExist=true
+    ports:
+      - 8091:8091
+    networks:
+      - spring-cloud-network
+  credit-service:
+    depends_on:
+      - db
+    container_name: credit-service
+    build:
+      context: credit-service
+      dockerfile: Dockerfile
+    image: credit-service:latest
+    environment:
+      - dbUrl=jdbc:mysql://db:3306/bank2?createDatabaseIfNotExist=true
+    ports:
+      - 8092:8092
+    networks:
+      - spring-cloud-network
+  camunda-orchestration:
+    container_name: camunda-orchestration
+    build:
+      context: camunda-orchestration
+      dockerfile: Dockerfile
+    image: camunda-orchestration:latest
+    environment:
+      - account_url=http://accounts-service:8093/account
+      - debit_url=http://debit-service:8091/debit
+      - credit_url=http://credit-service:8092/credit
+    ports:
+      - 8090:8090
+    networks:
+      - spring-cloud-network
+  db:
+    image: mysql
+    # NOTE: use of "mysql_native_password" is not recommended: https://dev.mysql.com/doc/refman/8.0/en/upgrading-from-previous-series.html#upgrade-caching-sha2-password
+    # (this is just an example, not intended to be a production configuration)
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    networks:
+      - spring-cloud-network
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - spring-cloud-network
+networks:
+  spring-cloud-network:
+    driver: bridge
