@@ -16,6 +16,7 @@ import org.springframework.test.context.ActiveProfiles;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @ActiveProfiles("int")
+@Disabled("until mysql installed on docker")
 public class DebitControllerIntegrationTest {
 
     @LocalServerPort
