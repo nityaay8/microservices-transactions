@@ -54,7 +54,7 @@ services:
     image: adminer
     restart: always
     ports:
-      - 8070:8070
+      - 8070:8080
     networks:
       - spring-cloud-network
 networks:
