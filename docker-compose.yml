@@ -1,4 +1,4 @@
-version: '2'
+version: "3.7"
 services:
   accounts-service:
     depends_on:
@@ -48,6 +48,10 @@ services:
       context: camunda-orchestration
       dockerfile: Dockerfile
     image: camunda-orchestration:latest
+    environment:
+      - account_url=http://accounts-service:8093/account
+      - debit_url=http://debit-service:8091/debit
+      - credit_url=http://credit-service:8092/credit
     ports:
       - 8090:8090
     networks:
