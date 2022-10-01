@@ -23,7 +23,7 @@ services:
       dockerfile: Dockerfile
     image: debit-service:latest
     environment:
-      - dbUrl=jdbc:mysql://db:3306/bank2?createDatabaseIfNotExist=true
+      - dbUrl=jdbc:mysql://db:3306/bank1?createDatabaseIfNotExist=true
     ports:
       - 8091:8091
     networks:
