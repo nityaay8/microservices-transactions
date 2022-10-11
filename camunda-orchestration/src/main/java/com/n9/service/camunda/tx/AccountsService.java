@@ -2,18 +2,22 @@ package com.n9.service.camunda.tx;
 
 
 import com.n9.dto.AccountDTO;
+import com.n9.dto.DebitDTO;
+import com.n9.filter.MdcFilter;
+import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.logging.Logger;
 
+@Slf4j
 public class AccountsService implements JavaDelegate {
 
-    private final static Logger LOGGER = Logger.getLogger(AccountsService.class.getName());
 
     @Value("${account_url}")
     private String accountsUrl;
@@ -23,25 +27,31 @@ public class AccountsService implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution execution) throws Exception {
-        LOGGER.info("validation start");
-        LOGGER.info("performing the account validation");
+        log.debug("validation process start");
+        log.info("performing the account validation process");
         Long accountId = (Long) execution.getVariable(TxConstants.FROM_ACCOUNT_ID);
         Float amount = (Float) execution.getVariable(TxConstants.AMOUNT);
 
-        ResponseEntity<AccountDTO> accountDTOResponseEntity = restTemplate.getForEntity(accountsUrl + "/" + accountId, AccountDTO.class);
+        HttpHeaders headers = new HttpHeaders();
+        headers.set(MdcFilter.CORRELATION_ID, MDC.get(MdcFilter.CORRELATION_ID));
 
-        LOGGER.info("accountDTOResponseEntity = " + accountDTOResponseEntity);
+        HttpEntity<DebitDTO> request =
+                new HttpEntity<DebitDTO>(null, headers);
+
+        ResponseEntity<AccountDTO> accountDTOResponseEntity = restTemplate.exchange(accountsUrl + "/" + accountId, HttpMethod.GET, request, AccountDTO.class);
+
+        log.info("accountDTOResponseEntity = " + accountDTOResponseEntity);
 
         if (accountDTOResponseEntity.getStatusCode().is2xxSuccessful() && accountDTOResponseEntity.getBody() != null) {
             if (amount > accountDTOResponseEntity.getBody().getAmount()) {
                 execution.setVariable(TxConstants.VALID_ACT, false);
-                LOGGER.info("in sufficient balance");
+                log.info("in sufficient balance");
             } else {
                 execution.setVariable(TxConstants.VALID_ACT, true);
             }
         } else {
             execution.setVariable(TxConstants.VALID_ACT, false);
         }
-        LOGGER.info("validation end");
+        log.info("account validation process end");
     }
 }
