@@ -14,6 +14,11 @@ services:
       - 8093:8093
     networks:
       - spring-cloud-network
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://localhost:12201" # Logstash UDP input port
+        tag: "accounts-service-tag"
   debit-service:
     depends_on:
       - db
@@ -26,6 +31,11 @@ services:
       - dbUrl=jdbc:mysql://db:3306/bank1?createDatabaseIfNotExist=true
     ports:
       - 8091:8091
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://localhost:12201" # Logstash UDP input port
+        tag: "debit-service-tag"
     networks:
       - spring-cloud-network
   credit-service:
@@ -42,6 +52,11 @@ services:
       - 8092:8092
     networks:
       - spring-cloud-network
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://localhost:12201" # Logstash UDP input port
+        tag: "credit-service-tag"
   camunda-orchestration:
     container_name: camunda-orchestration
     build:
@@ -56,6 +71,11 @@ services:
       - 8090:8090
     networks:
       - spring-cloud-network
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://localhost:12201" # Logstash UDP input port
+        tag: "camunda-orchestration-tag"
   db:
     image: mysql
     # NOTE: use of "mysql_native_password" is not recommended: https://dev.mysql.com/doc/refman/8.0/en/upgrading-from-previous-series.html#upgrade-caching-sha2-password
@@ -68,11 +88,69 @@ services:
       MYSQL_ROOT_PASSWORD: root
     networks:
       - spring-cloud-network
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://localhost:12201" # Logstash UDP input port
+        tag: "mysql-tag"
   adminer:
     image: adminer
     restart: always
     ports:
       - 8080:8080
+    networks:
+      - spring-cloud-network
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://localhost:12201" # Logstash UDP input port
+        tag: "adminer-tag"
+
+  elasticsearch:
+    image: elasticsearch:7.11.1
+    environment:
+      - discovery.type=single-node
+    volumes:
+      - ./elasticsearch_data/:/usr/share/elasticsearch/data
+    mem_limit: "1g"
+    networks:
+      - spring-cloud-network
+
+  redis-cache:
+    image: redis:6.2
+    networks:
+      - spring-cloud-network
+
+  logstash-agent:
+    image: logstash:7.11.1
+    volumes:
+      - ./logstash-agent:/etc/logstash
+    command: logstash -f /etc/logstash/logstash.conf
+    depends_on:
+      - elasticsearch
+    ports:
+      - 12201:12201/udp
+    networks:
+      - spring-cloud-network
+
+  logstash-central:
+    image: logstash:7.11.1
+    volumes:
+      - ./logstash-central:/etc/logstash
+    command: logstash -f /etc/logstash/logstash.conf
+    depends_on:
+      - elasticsearch
+    networks:
+      - spring-cloud-network
+
+  kibana:
+    image: kibana:7.11.1
+    ports:
+      - 5601:5601
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    depends_on:
+      - elasticsearch
     networks:
       - spring-cloud-network
 networks:

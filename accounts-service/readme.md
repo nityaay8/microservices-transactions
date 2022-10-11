@@ -9,3 +9,6 @@ https://www.baeldung.com/spring-rest-openapi-documentation
 
 [//]: # (camunda)
 https://docs.camunda.org/get-started/spring-boot/project-setup/
+
+# ELK stack
+https://sharmarajdaksh.github.io/blog/shoving-your-docker-logs-to-elk
