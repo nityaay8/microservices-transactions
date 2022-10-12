@@ -25,6 +25,7 @@ public class CreditAccountController {
     public ResponseEntity save(@RequestBody AccountDTO accountDTO) {
 
         ResponseEntity responseEntity = null;
+        log.debug("save enter");
 
         if (accountDTO.getAmount() == null || accountDTO.getName() == null) {
 
@@ -33,9 +34,10 @@ public class CreditAccountController {
         } else {
 
             AccountDTO savedAccountDTO = creditDataService.saveAccount(accountDTO);
+            log.info("account created successfully {} ", accountDTO);
             responseEntity = ResponseEntity.ok(savedAccountDTO);
         }
-
+        log.debug("save exit");
         return responseEntity;
     }
 }

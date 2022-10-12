@@ -26,6 +26,7 @@ public class CreditDataService {
     private ModelMapper modelMapper;
 
     public AccountDTO saveAccount(AccountDTO accountDTO) {
+        log.debug("saveAccount enter");
         Account account = modelMapper.map(accountDTO, Account.class);
 
         account.setUpdatedBy("system");
@@ -36,7 +37,8 @@ public class CreditDataService {
         Account savedAccount = accountRepository.save(account);
 
         accountDTO = modelMapper.map(savedAccount, AccountDTO.class);
-
+        log.info("account details saved in DB {} ", savedAccount);
+        log.debug("saveAccount exit");
         return accountDTO;
     }
 
