@@ -1,10 +1,12 @@
 package com.n9.service;
 
+import com.n9.dto.AccountDTO;
 import com.n9.dto.CreditDTO;
 import com.n9.entity.Account;
 import com.n9.exception.CreditAccountException;
 import com.n9.repository.AccountRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,24 @@ public class CreditDataService {
 
     @Autowired
     private AccountRepository accountRepository;
+
+    @Autowired
+    private ModelMapper modelMapper;
+
+    public AccountDTO saveAccount(AccountDTO accountDTO) {
+        Account account = modelMapper.map(accountDTO, Account.class);
+
+        account.setUpdatedBy("system");
+        account.setCreatedBy("system");
+
+        account.setUpdatedDate(new Date());
+        account.setCreatedDate(new Date());
+        Account savedAccount = accountRepository.save(account);
+
+        accountDTO = modelMapper.map(savedAccount, AccountDTO.class);
+
+        return accountDTO;
+    }
 
 
     public CreditDTO performCredit(CreditDTO debitDTO) {

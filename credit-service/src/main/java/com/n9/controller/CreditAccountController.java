@@ -1,12 +1,10 @@
 package com.n9.controller;
 
-import com.n9.dto.CreditDTO;
+import com.n9.dto.AccountDTO;
 import com.n9.dto.StatusDTO;
-import com.n9.exception.CreditAccountException;
+import com.n9.entity.Account;
 import com.n9.service.CreditDataService;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,34 +14,28 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/credit")
+@RequestMapping("creditAccount")
 @Slf4j
-public class CreditController {
-
-    public CreditController() {
-
-    }
+public class CreditAccountController {
 
     @Autowired
     private CreditDataService creditDataService;
 
     @PostMapping
-    public ResponseEntity performCredit(@RequestBody CreditDTO debitDTO) {
+    public ResponseEntity save(@RequestBody AccountDTO accountDTO) {
 
         ResponseEntity responseEntity = null;
-        log.debug("performCredit start");
 
-        if (debitDTO.getActId() == null || debitDTO.getAmount() == null) {
+        if (accountDTO.getAmount() == null || accountDTO.getName() == null) {
 
-            log.warn("invalid account details {} ", debitDTO);
+            log.warn("invalid account details {} ", accountDTO);
             responseEntity = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new StatusDTO("invalid account details"));
         } else {
-            debitDTO = creditDataService.performCredit(debitDTO);
-            responseEntity = ResponseEntity.ok(debitDTO);
+
+            AccountDTO savedAccountDTO = creditDataService.saveAccount(accountDTO);
+            responseEntity = ResponseEntity.ok(savedAccountDTO);
         }
-        log.debug("performCredit end");
 
         return responseEntity;
-
     }
 }

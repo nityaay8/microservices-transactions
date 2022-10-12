@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 public class AccountsService implements JavaDelegate {
 
 
-    @Value("${account_url}")
+    @Value("${account_api_url}")
     private String accountsUrl;
 
     @Autowired

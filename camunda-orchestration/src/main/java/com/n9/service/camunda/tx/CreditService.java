@@ -21,7 +21,7 @@ import java.util.logging.Logger;
 public class CreditService implements JavaDelegate {
 
 
-    @Value("${credit_url}")
+    @Value("${credit_api_url}")
     private String creditUrl;
 
     @Autowired

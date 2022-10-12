@@ -21,7 +21,7 @@ import java.util.logging.Logger;
 public class DebitService implements JavaDelegate {
 
 
-    @Value("${debit_url}")
+    @Value("${debit_api_url}")
     private String debitUrl;
 
 
