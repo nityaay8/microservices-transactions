@@ -5,6 +5,7 @@ import com.n9.dto.DebitDTO;
 import com.n9.dto.StatusDTO;
 import com.n9.exception.AccountException;
 import com.n9.service.AccountDataService;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +17,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/account")
+@Slf4j
 public class AccountController {
 
-    Logger logger = LoggerFactory.getLogger(AccountController.class);
 
     public AccountController() {
 
@@ -30,20 +31,27 @@ public class AccountController {
     @GetMapping
     public ResponseEntity getAllAccounts() {
         ResponseEntity responseEntity;
+        log.debug("getAllAccounts start");
         List<AccountDTO> accountDTOList = accountDataService.getAllAccount();
         responseEntity = ResponseEntity.ok(accountDTOList);
+        log.info("accountDTOList size = {}", accountDTOList.size());
+        log.debug("getAllAccounts end");
         return responseEntity;
     }
 
     @GetMapping("{accountId}")
     public ResponseEntity getAccount(@PathVariable("accountId") Long accountId) {
+        log.debug("getAccount start");
         ResponseEntity responseEntity;
         try {
             AccountDTO accountDTO = accountDataService.getAccount(accountId);
+            log.info("got the account details  {}", accountDTO);
             responseEntity = ResponseEntity.ok(accountDTO);
         } catch (AccountException ae) {
+            log.error("error while getting the account details  {}", ae);
             responseEntity = ResponseEntity.badRequest().body(new StatusDTO(ae.getMessage()));
         } catch (Exception e) {
+            log.error("generic error while getting the account details", e);
             responseEntity = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new StatusDTO(e.getMessage()));
 
         }
@@ -56,7 +64,7 @@ public class AccountController {
         ResponseEntity responseEntity = null;
 
         if (accountDTO.getAmount() == null) {
-            logger.warn("invalid account details = " + accountDTO);
+            log.warn("invalid account details = " + accountDTO);
             responseEntity = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new StatusDTO("invalid account details"));
         } else {
             accountDTO = accountDataService.save(accountDTO);
@@ -72,7 +80,7 @@ public class AccountController {
         ResponseEntity responseEntity = null;
 
         if (accountDTO.getAccountId() == null || accountDTO.getAmount() == null) {
-            logger.warn("invalid account details = " + accountDTO);
+            log.warn("invalid account details = " + accountDTO);
             responseEntity = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new StatusDTO("invalid account details"));
         } else {
             accountDTO = accountDataService.update(accountDTO);

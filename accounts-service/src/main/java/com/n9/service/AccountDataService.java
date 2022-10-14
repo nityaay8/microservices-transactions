@@ -4,6 +4,7 @@ import com.n9.dto.AccountDTO;
 import com.n9.entity.Account;
 import com.n9.exception.AccountException;
 import com.n9.repository.AccountRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
+@Slf4j
 public class AccountDataService {
 
     @Autowired
@@ -92,13 +94,14 @@ public class AccountDataService {
 
     public List<AccountDTO> getAllAccount() {
 
-
+        log.debug("get all accounts start");
         List<Account> accountList = accountRepository.findAll();
+        log.info("get all accounts from db, size = {} " + accountList.size());
 
         List<AccountDTO> accountDTOList = accountList.stream().
                 map(act -> modelMapper.map(act, AccountDTO.class)).collect(Collectors.toList());
 
-
+        log.debug("get all accounts end");
         return accountDTOList;
     }
 

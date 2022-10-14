@@ -2,6 +2,7 @@ package com.n9.service.camunda.tx;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.n9.dto.DebitDTO;
+import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,21 +14,20 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.logging.Logger;
 
+@Slf4j
 public class ReverseDebitService extends DebitService {
-
-    private final static Logger LOGGER = Logger.getLogger(ReverseDebitService.class.getName());
 
 
     @Override
     public void execute(DelegateExecution execution) throws Exception {
-        LOGGER.info("reverse debit start");
+        log.info("reverse debit  process started");
         Long accountId = (Long) execution.getVariable(TxConstants.FROM_ACCOUNT_ID);
 
         Float amount = (Float) execution.getVariable(TxConstants.AMOUNT);
 
         performDebit(execution, accountId, amount * -1);
 
-        LOGGER.info("reverse debit end");
+        log.info("reverse debit  process ended");
 
     }
 }
